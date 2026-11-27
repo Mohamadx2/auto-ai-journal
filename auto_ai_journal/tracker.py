@@ -2,7 +2,7 @@
 Core activity tracker for Auto AI Journal.
 
 Polls the currently focused window, maps it to a category,
-accumulates time, and writes daily Markdown + JSON journals.
+accumulates time, and writes daily Markdown + JSON + TXT journals.
 """
 
 from __future__ import annotations
@@ -136,11 +136,16 @@ class Journal:
         self._load_existing()
 
     def _paths(self):
+        """Return paths for json, md, and txt files (all named with the date)."""
         base = self.output_dir / self.today.isoformat()
-        return base.with_suffix(".json"), base.with_suffix(".md")
+        return (
+            base.with_suffix(".json"),
+            base.with_suffix(".md"),
+            base.with_suffix(".txt"),
+        )
 
     def _load_existing(self):
-        json_path, _ = self._paths()
+        json_path, _, _ = self._paths()
         if json_path.exists():
             try:
                 data = json.loads(json_path.read_text(encoding="utf-8"))
@@ -158,8 +163,19 @@ class Journal:
             self.seconds = defaultdict(float)
         self.seconds[category] += delta
 
+    def _build_activity_lines(self) -> tuple[list[str], float]:
+        """Build the list of activity lines and return total hours."""
+        lines = []
+        total = 0.0
+        for cat, secs in sorted(self.seconds.items(), key=lambda x: -x[1]):
+            hours = secs / 3600
+            total += hours
+            if hours >= 0.05:  # only show ≥ 3 minutes
+                lines.append(f"- {hours:.1f} hours {cat.replace('_', ' ')}")
+        return lines, total
+
     def _flush(self):
-        json_path, md_path = self._paths()
+        json_path, md_path, txt_path = self._paths()
 
         # Structured JSON
         payload = {
@@ -169,17 +185,26 @@ class Journal:
         }
         json_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
-        # Human-readable Markdown
-        lines = [f"## {self.today.isoformat()}\n"]
-        total = 0.0
-        for cat, secs in sorted(self.seconds.items(), key=lambda x: -x[1]):
-            hours = secs / 3600
-            total += hours
-            if hours >= 0.05:  # only show ≥ 3 minutes
-                lines.append(f"- {hours:.1f} hours {cat.replace('_', ' ')}")
+        activity_lines, total = self._build_activity_lines()
 
-        lines.append(f"\n**Total tracked active time:** {total:.1f} hours\n")
-        md_path.write_text("\n".join(lines), encoding="utf-8")
+        # Human-readable Markdown
+        md_lines = [f"## {self.today.isoformat()}\n"]
+        md_lines.extend(activity_lines)
+        md_lines.append(f"\n**Total tracked active time:** {total:.1f} hours\n")
+        md_path.write_text("\n".join(md_lines), encoding="utf-8")
+
+        # Plain TXT export (date in filename, clean readable format)
+        txt_lines = [
+            f"Auto AI Journal – {self.today.isoformat()}",
+            "=" * 40,
+            "",
+        ]
+        txt_lines.extend(activity_lines)
+        txt_lines.append("")
+        txt_lines.append(f"Total tracked active time: {total:.1f} hours")
+        txt_lines.append("")
+        txt_lines.append(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        txt_path.write_text("\n".join(txt_lines), encoding="utf-8")
 
     def flush(self):
         self._flush()
