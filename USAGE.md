@@ -13,9 +13,10 @@ python -m auto_ai_journal
 python -m auto_ai_journal --background
 ```
 
-The program will create a folder (default: `~/Documents/AutoAIJournal`) and write two files every day:
+The program will create a folder (default: `~/Documents/AutoAIJournal`) and write three files every day:
 
-- `YYYY-MM-DD.md`  → human-readable journal
+- `YYYY-MM-DD.md`  → Markdown journal
+- `YYYY-MM-DD.txt` → plain text export (same content, date in the filename)
 - `YYYY-MM-DD.json` → machine-readable data
 
 ### Example Markdown entry
@@ -31,6 +32,25 @@ The program will create a folder (default: `~/Documents/AutoAIJournal`) and writ
 
 **Total tracked active time:** 6.1 hours
 ```
+
+### Example TXT entry (`2026-11-27.txt`)
+
+```
+Auto AI Journal – 2026-11-27
+========================================
+
+- 1.4 hours browser
+- 2.1 hours documents
+- 1.5 hours gaming
+- 0.8 hours coding
+- 0.3 hours communication
+
+Total tracked active time: 6.1 hours
+
+Last updated: 2026-11-27 23:45:12
+```
+
+The `.txt` file is deliberately plain so it opens cleanly in any text editor, Notepad, phone, or cloud viewer.
 
 ## Running at startup (Windows)
 
@@ -74,7 +94,7 @@ cloud:
   path: "~/Google Drive/My Drive/AutoAIJournal"
 ```
 
-The journal will copy the daily `.md` and `.json` files into that folder. True Google Drive API upload is on the roadmap.
+The journal will copy the daily `.md`, `.txt` and `.json` files into that folder. True Google Drive API upload is on the roadmap.
 
 ## Customizing categories
 
