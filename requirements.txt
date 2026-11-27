@@ -1,0 +1,11 @@
+psutil>=5.9.0
+pyyaml>=6.0
+platformdirs>=3.0.0
+# Optional but recommended
+pystray>=0.19.0          # system tray (Windows / Linux)
+Pillow>=10.0.0           # required by pystray
+# Windows-specific (install only on Windows)
+pywin32>=306; sys_platform == 'win32'
+# Future cloud support
+# google-api-python-client
+# google-auth-oauthlib

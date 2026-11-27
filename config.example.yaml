@@ -1,0 +1,83 @@
+# Auto AI Journal configuration
+# Copy this file to config.yaml and adjust as needed
+
+poll_interval: 5                  # seconds between samples
+min_session_seconds: 15           # ignore very short focus switches
+
+output_dir: "~/Documents/AutoAIJournal"
+
+# Simple keyword → category mapping
+# First matching rule wins
+categories:
+  browser:
+    - chrome
+    - firefox
+    - msedge
+    - brave
+    - opera
+    - safari
+    - chromium
+  documents:
+    - winword
+    - excel
+    - powerpnt
+    - wps
+    - libreoffice
+    - soffice
+    - acrobat
+    - foxit
+    - notion
+    - obsidian
+  coding:
+    - code
+    - cursor
+    - pycharm
+    - idea64
+    - clion
+    - webstorm
+    - terminal
+    - windows terminal
+    - powershell
+    - cmd
+    - iterm
+    - alacritty
+  gaming:
+    - steam
+    - epicgameslauncher
+    - riotclientservices
+    - leagueclient
+    - valorant
+  communication:
+    - discord
+    - slack
+    - teams
+    - outlook
+    - thunderbird
+    - zoom
+    - whatsapp
+  media:
+    - spotify
+    - vlc
+    - mpv
+    - netflix
+    - youtube
+
+# Optional AI reflection (disabled by default)
+ai_summary:
+  enabled: false
+  provider: openai
+  model: gpt-4o-mini
+  api_key_env: OPENAI_API_KEY
+  prompt_template: |
+    You are a calm, neutral personal journal assistant.
+    Given the following activity log for today, write a short (3-6 sentences)
+    reflective diary entry in first person. Keep it factual, gentle, and free of judgment.
+
+    Activity:
+    {activity}
+
+# Cloud / Drive (optional)
+cloud:
+  enabled: false
+  provider: local_folder          # "local_folder" simply copies the daily files
+  path: "~/Google Drive/AutoAIJournal"
