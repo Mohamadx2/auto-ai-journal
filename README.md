@@ -27,7 +27,10 @@ You can also enable a lightweight AI summarizer (optional) that turns the raw ac
 - Fully automatic — no typing or manual logging
 - Runs in the background (system tray on supported platforms)
 - Categorizes activity by application + window title
-- Daily Markdown + JSON logs with timestamps
+- Daily logs in three formats:
+  - `YYYY-MM-DD.md` — Markdown diary
+  - `YYYY-MM-DD.txt` — plain text export (easy to open anywhere)
+  - `YYYY-MM-DD.json` — structured data
 - Optional AI-generated reflective summary
 - Optional cloud sync (Google Drive / local folder / any path)
 - Cross-platform foundation (Windows primary, Linux & macOS support planned)
@@ -63,8 +66,26 @@ On Windows you can also create a simple startup shortcut or use Task Scheduler.
 
 Logs are saved in `~/Documents/AutoAIJournal/` (configurable):
 
-- `2026-11-27.md` — human-readable diary
+- `2026-11-27.md`  — Markdown diary
+- `2026-11-27.txt` — plain text version (same content, easy to share or archive)
 - `2026-11-27.json` — structured data
+
+The `.txt` file is named with the date and looks like this:
+
+```
+Auto AI Journal – 2026-11-27
+========================================
+
+- 1.4 hours browser
+- 2.1 hours documents
+- 1.5 hours gaming
+- 0.8 hours coding
+- 0.3 hours communication
+
+Total tracked active time: 6.1 hours
+
+Last updated: 2026-11-27 23:45:12
+```
 
 ---
 
@@ -138,7 +159,7 @@ cloud:
 1. A lightweight background process polls the currently active window every few seconds.
 2. It maps the process name + window title to a category.
 3. Time is accumulated only while the window stays active above a minimum threshold.
-4. At the end of each day (or on demand) a clean Markdown entry is written.
+4. At the end of each day (or on demand) clean Markdown, TXT and JSON entries are written.
 5. Optionally an LLM turns the raw numbers into a short reflective paragraph.
 6. Files can be copied/synced to any folder or cloud location you configure.
 
@@ -155,7 +176,7 @@ cloud:
 ## Roadmap
 
 - [x] Core activity sampling + categorization
-- [x] Daily Markdown + JSON journals
+- [x] Daily Markdown + JSON + TXT journals
 - [ ] System tray icon + pause/resume
 - [ ] Proper Windows service / auto-start
 - [ ] Google Drive upload (OAuth)
